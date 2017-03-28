@@ -53,7 +53,7 @@ class Reducer():
                     # If file name not encountered yet
                     elif (fname != tuple[0]):
                         line_numbers = [line_num]
-                        pairs.append((fname, line_number))
+                        pairs.append((fname, line_numbers))
                 # If the key becomes a stop word, add it to stop words dictionary
                 if (self.stop_word(key, fname, line_numbers)):
                     #stop_words[key] = pairs
@@ -91,6 +91,6 @@ if __name__ == "__main__":
     start = time.time()
     reducer.readin_pairs()
     stop = time.time() - start
-    #print_wk()
-    print_sw()
+    print_wk()
+    #print_sw()
     sys.stderr.write("Total word count: " + str(word_count) + " (" + str(round(stop, 2)) + " secs) " + '\n')
