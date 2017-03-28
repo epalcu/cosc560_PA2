@@ -14,7 +14,7 @@ class Mapper():
             for word in input:
                 # filepath = os.environ['map_input_file']
                 # filename = os.path.split(filepath)[-1]
-                print '%s\t%s\t%s' % (word.lower(), "shakespeare.txt", line_num)
+                print '%s\t%s\t%s' % (word.lower(), "file.txt", line_num)
             line_num = line_num + 1
 
 if __name__ == "__main__":
