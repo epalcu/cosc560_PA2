@@ -23,15 +23,6 @@ class Reducer():
 
     # Determines which dictionary to add to: stop words dictionary or word keys dictionary
     def add_to_dict(self, key, fname, line_num):
-        # Coment out if we want to continue maintaining info for stop words
-        # # If word is a stop word
-        # if key in stop_words.keys():
-        #     # Get list of tuples for current word key
-        #     pairs = stop_words.get(key)
-        #     for tuple in pairs:
-        #         # If file name is in the tuple, add line number to its list
-        #         if (fname == tuple[0]):
-        #             tuple[1].append(line_num)
         # If word is a stop word
         if key in stop_words.keys():
             # Get list of tuples for current word key
@@ -42,18 +33,21 @@ class Reducer():
         else:
             # If word is a legit word key
             if key in word_keys.keys():
+                found = False
                 # Get list of tuples for current word key
                 pairs = word_keys.get(key)
                 # Traverse all tuples, (file_name, list of line numbers for word key) for each word key
                 for tuple in pairs:
                     # If file name is in the tuple, add line number to its list
                     if (fname == tuple[0]):
+                        found = True
                         tuple[1].append(line_num)
                         line_numbers = tuple[1][:]
-                    # If file name not encountered yet
-                    elif (fname != tuple[0]):
-                        line_numbers = [line_num]
-                        pairs.append((fname, line_number))
+                        break
+                # If file name not encountered
+                if (found == False):
+                    line_numbers = [line_num]
+                    pairs.append((fname, line_numbers))
                 # If the key becomes a stop word, add it to stop words dictionary
                 if (self.stop_word(key, fname, line_numbers)):
                     #stop_words[key] = pairs
@@ -91,6 +85,6 @@ if __name__ == "__main__":
     start = time.time()
     reducer.readin_pairs()
     stop = time.time() - start
-    #print_wk()
-    print_sw()
+    print_wk()
+    #print_sw()
     sys.stderr.write("Total word count: " + str(word_count) + " (" + str(round(stop, 2)) + " secs) " + '\n')
