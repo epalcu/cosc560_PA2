@@ -52,28 +52,25 @@ class Reducer():
 
 def remove_stop_words(distinct_words):
     frequency = int(distinct_words*0.05)
-    print frequency
     for key, value in word_keys.items():
         for file in range(0, len(value)):
             if (value[file][0] == file_name):
                 if (len(value[file][1]) >= frequency):
-                    print '%s\t%s\t%s' % (key, value[file][0], len(value[file][1]))
+                    #print '%s\t%s\t%s' % (key, value[file][0], len(value[file][1]))
                     value.pop(file)
-
-
 
 # Print out dictionary of word keys
 def print_wk():
     print "\n|------------------------- Word Keys -------------------------|\n"
     for key, value in word_keys.items():
         for file in value:
-            print '%s\t%s\t%s' % (key, value)
+            print '%s\t%s' % (key, value)
 
 if __name__ == "__main__":
     reducer = Reducer()
     start = time.time()
     reducer.readin_pairs()
     stop = time.time() - start
-    #print_wk()
+    print_wk()
     #sys.stderr.write("Total word count: " + str(word_count) + " (" + str(round(stop, 2)) + " secs) " + '\n')
     print ("Total elapsed time: {0} secs.").format(stop)
