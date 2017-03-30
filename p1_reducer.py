@@ -9,7 +9,6 @@ word_keys = {}
 class Reducer():
     # Read in (key, value) pairs from stdin (stdout of mapper)
     def readin_pairs(self):
-        global file_name
         for input in sys.stdin:
             # Breaks up input into list of words
             input = input.strip()
@@ -23,7 +22,7 @@ class Reducer():
                 file_name = fname
                 distinct_words = 0
             distinct_words = self.add_to_dict(word, fname, line_num, distinct_words)
-        return remove_stop_words(distinct_words)
+        return remove_stop_words(distinct_words, file_name)
 
     # Determines which dictionary to add to: stop words dictionary or word keys dictionary
     def add_to_dict(self, key, fname, line_num, distinct_words):
@@ -50,7 +49,7 @@ class Reducer():
             distinct_words = distinct_words + 1
         return distinct_words
 
-def remove_stop_words(distinct_words):
+def remove_stop_words(distinct_words, file_name):
     frequency = int(distinct_words*0.05)
     for key, value in word_keys.items():
         for file in range(0, len(value)):
