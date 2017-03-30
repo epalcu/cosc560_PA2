@@ -64,7 +64,7 @@ def print_wk():
     print "\n|------------------------- Word Keys -------------------------|\n"
     for key, value in word_keys.items():
         for file in value:
-            print '%s\t%s' % (key, value)
+            print '%s\t%s' % (key, len(value))
 
 if __name__ == "__main__":
     reducer = Reducer()
