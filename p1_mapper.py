@@ -12,7 +12,7 @@ class Mapper():
             # For each word, return (key, value) pair of its lowercase form and trivial value of 1
             # Print to stdout for reducer to read in
             for word in input:
-                filepath = os.environ['map_input_file']
+                filepath = os.environ['map_input_file'] 
                 filename = os.path.split(filepath)[-1]
                 print '%s\t%s\t%s' % (word.lower(), filename, line_num)
             line_num = line_num + 1
