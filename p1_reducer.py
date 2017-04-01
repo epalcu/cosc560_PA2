@@ -51,7 +51,7 @@ class Reducer():
         return distinct_words
 
 def remove_stop_words(distinct_words, file_name):
-    print "\n|------------------------- Stop Words -------------------------|\n"
+    #print "\n|------------------------- Stop Words -------------------------|\n"
     frequency = int(distinct_words*0.05)
     for key, value in word_keys.items():
         for file in range(0, len(value)):
