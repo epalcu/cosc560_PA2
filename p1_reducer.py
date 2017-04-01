@@ -10,62 +10,70 @@ stop_words = {}
 class Reducer():
     # Read in (key, value) pairs from stdin (stdout of mapper)
     def readin_pairs(self):
+        global word_count
+        word_count = 0
         for input in sys.stdin:
             # Breaks up input into list of words
             input = input.strip()
             word, fname, line_num = input.split('\t', 2)
-            try:
-                if (fname != file_name):
-                    distinct_words = remove_stop_words(distinct_words, file_name)
-                    file_name = fname
-                    distinct_words = 0
-            except:
-                file_name = fname
-                distinct_words = 0
-            distinct_words = self.add_to_dict(word, fname, line_num, distinct_words)
-        return remove_stop_words(distinct_words, file_name)
+            #print word, fname, line_num
+            word_count = word_count + 1
+            #print word_count
+            self.add_to_dict(word, fname, line_num)
 
     # Determines which dictionary to add to: stop words dictionary or word keys dictionary
-    def add_to_dict(self, key, fname, line_num, distinct_words):
-        # If word is a legit word key
-        if key in word_keys.keys():
-            found = False
+    def add_to_dict(self, key, fname, line_num):
+        # If word is a stop word
+        if key in stop_words.keys():
             # Get list of tuples for current word key
-            pairs = word_keys.get(key)
-            # Traverse all tuples, (file_name, list of line numbers for word key) for each word key
-            for tuple in range(0, len(pairs)):
-                # If file name is in the tuple, add line number to its list
-                if (fname == pairs[tuple][0]):
-                    found = True
-                    value = pairs[tuple][1] + 1
-                    pairs.pop(tuple)
-                    pairs.append((fname, value))
-                    break
-            # If file name not encountered
-            if (found == False):
-                pairs.append((fname, 1))
-                distinct_words = distinct_words + 1
+            file = stop_words.get(key)
+            # If key corresponds to this file, do nothing
+            if (fname == file):
+                return
         else:
-            word_keys[key] = [(fname, 1)]
-            distinct_words = distinct_words + 1
-        return distinct_words
+            # If word is a legit word key
+            if key in word_keys.keys():
+                found = False
+                # Get list of tuples for current word key
+                pairs = word_keys.get(key)
+                # Traverse all tuples, (file_name, list of line numbers for word key) for each word key
+                for tuple in pairs:
+                    # If file name is in the tuple, add line number to its list
+                    if (fname == tuple[0]):
+                        found = True
+                        tuple[1].append(line_num)
+                        line_numbers = tuple[1][:]
+                        break
+                # If file name not encountered
+                if (found == False):
+                    line_numbers = [line_num]
+                    pairs.append((fname, line_numbers))
+                # If the key becomes a stop word, add it to stop words dictionary
+                if (self.stop_word(key, fname, line_numbers)):
+                    #stop_words[key] = pairs
+                    stop_words[key] = fname
+                    #print "New stop word found: {0}, {1}".format(key, pairs)
+                else:
+                    word_keys[key] = pairs
+            else:
+                #print "New key added: {0}".format([(fname, [line_num])])
+                word_keys[key] = [(fname, [line_num])]
 
-def remove_stop_words(distinct_words, file_name):
-    #print "\n|------------------------- Stop Words -------------------------|\n"
-    frequency = int(distinct_words*0.05)
-    for key, value in word_keys.items():
-        for file in range(0, len(value)):
-            if (value[file][0] == file_name):
-                if (value[file][1] >= frequency):
-                    #print '%s\t%s\t%s' % (key, value[file][0], len(value[file][1]))
-                    #print key, value[file][1]
-                    value.pop(file)
+    # Determines if word is stop word or not based on an occurrence of greater than 200
+    def stop_word(self, word, fname, count):
+        if (len(count) > 250):
+            #print "New stop word found: {0}".format(word)
+            word_keys.pop(word, None)
+            return True
+        else:
+            return False
 
 # Print out dictionary of word keys
 def print_wk():
     #print "\n|------------------------- Word Keys -------------------------|\n"
     for key, value in word_keys.items():
-        print '%s\t%s' % (key, value)
+        for file in value:
+            print '%s\t%s\t%s' % (key, file[0], len(file[1]))
 
 if __name__ == "__main__":
     reducer = Reducer()
