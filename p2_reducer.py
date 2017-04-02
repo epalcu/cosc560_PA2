@@ -16,9 +16,7 @@ class Reducer():
             # Breaks up input into list of words
             input = input.strip()
             word, fname, line_num = input.split('\t', 2)
-            #print word, fname, line_num
             word_count = word_count + 1
-            #print word_count
             self.add_to_dict(word, fname, line_num)
 
     # Determines which dictionary to add to: stop words dictionary or word keys dictionary
@@ -50,19 +48,15 @@ class Reducer():
                     pairs.append((fname, line_numbers))
                 # If the key becomes a stop word, add it to stop words dictionary
                 if (self.stop_word(key, fname, line_numbers)):
-                    #stop_words[key] = pairs
                     stop_words[key] = fname
-                    #print "New stop word found: {0}, {1}".format(key, pairs)
                 else:
                     word_keys[key] = pairs
             else:
-                #print "New key added: {0}".format([(fname, [line_num])])
                 word_keys[key] = [(fname, [line_num])]
 
     # Determines if word is stop word or not based on an occurrence of greater than 200
     def stop_word(self, word, fname, count):
-        if (len(count) > 200):
-            #print "New stop word found: {0}".format(word)
+        if (len(count) > 750):
             word_keys.pop(word, None)
             return True
         else:
