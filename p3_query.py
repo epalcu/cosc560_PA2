@@ -7,7 +7,7 @@ class Query():
     def find_instances(self):
         line_list = []
 
-        with open('inverted_index.txt') as fname:
+        with open(sys.argv[1]) as fname:
             lines = fname.readlines()
             for line in lines:
                 line_list.append(line)
@@ -26,7 +26,7 @@ class Query():
                     l_split = l.split('\t')
                     if(l_split[0] == w.lower()):
                         print l
-                        found = True            
+                        found = True
                         break
 
                 if(found == False):
