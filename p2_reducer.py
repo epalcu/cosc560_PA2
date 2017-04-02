@@ -87,4 +87,5 @@ if __name__ == "__main__":
     stop = time.time() - start
     print_wk()
     #print_sw()
-    sys.stderr.write("Total word count: " + str(word_count) + " (" + str(round(stop, 2)) + " secs) " + '\n')
+    #sys.stderr.write("Total word count: " + str(word_count) + " (" + str(round(stop, 2)) + " secs) " + '\n')
+    #print ("Total elapsed time: {0} secs.").format(stop)
