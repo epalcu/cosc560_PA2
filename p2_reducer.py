@@ -64,7 +64,7 @@ class Reducer():
 
 # Print out dictionary of word keys
 def print_wk():
-    print "\n|------------------------- Word Keys -------------------------|\n"
+    #print "\n|------------------------- Word Keys -------------------------|\n"
     for key, value in word_keys.items():
         print '%s\t%s' % (key, value)
 
