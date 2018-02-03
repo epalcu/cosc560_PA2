@@ -17,7 +17,6 @@ class Reducer():
             
             # Breaks up input into list of words
             input = input.strip()
-            
             word, fname, line_num = input.split('\t', 2)
             word_count = word_count + 1
             
