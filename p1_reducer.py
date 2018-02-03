@@ -8,23 +8,30 @@ word_keys = {}
 stop_words = {}
 
 class Reducer():
+    
     # Read in (key, value) pairs from stdin (stdout of mapper)
     def readin_pairs(self):
         global word_count
         word_count = 0
         for input in sys.stdin:
+            
             # Breaks up input into list of words
             input = input.strip()
+            
             word, fname, line_num = input.split('\t', 2)
             word_count = word_count + 1
+            
             self.add_to_dict(word, fname, line_num)
 
     # Determines which dictionary to add to: stop words dictionary or word keys dictionary
     def add_to_dict(self, key, fname, line_num):
+        
         # If word is a stop word
         if key in stop_words.keys():
+            
             # Get list of tuples for current word key
             file = stop_words.get(key)
+            
             # If key corresponds to this file, do nothing
             if (fname == file):
                 return
@@ -32,20 +39,25 @@ class Reducer():
             # If word is a legit word key
             if key in word_keys.keys():
                 found = False
+                
                 # Get list of tuples for current word key
                 pairs = word_keys.get(key)
+                
                 # Traverse all tuples, (file_name, list of line numbers for word key) for each word key
                 for tuple in pairs:
+                    
                     # If file name is in the tuple, add line number to its list
                     if (fname == tuple[0]):
                         found = True
                         tuple[1].append(line_num)
                         line_numbers = tuple[1][:]
                         break
+                        
                 # If file name not encountered
                 if (found == False):
                     line_numbers = [line_num]
                     pairs.append((fname, line_numbers))
+                    
                 # If the key becomes a stop word, add it to stop words dictionary
                 if (self.stop_word(key, fname, line_numbers)):
                     stop_words[key] = fname
